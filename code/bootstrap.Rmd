@@ -1,0 +1,57 @@
+---
+title: "Julian's Sandbox"
+output: html_notebook
+---
+
+# Environment Setup
+```{r}
+# clear junk
+rm(list = ls())
+```
+
+```{r include = FALSE}
+# make sure your working directory is set to datafest2022
+
+library(readr)
+library(tidyverse)
+library(data.table)
+```
+
+```{r}
+setwd("C:/Users/julia/Documents/GitHub/datafest2022/data")
+
+s5 <- read_csv("./S5_scores_cleaned.csv")
+```
+
+```{r}
+logs <- fread("C:\\Users\\julia\\Downloads\\logs.csv")
+```
+
+```{r}
+temp <- data.frame(s5)
+temp <- temp[complete.cases(temp), ]
+
+temp <- pivot_wider(temp, id_cols = player_id, names_from = weeks, names_prefix = "week", values_from = S5_mean)
+s5_wide <- temp[complete.cases(temp), ]
+```
+
+```{r}
+s5_wide
+```
+```{r}
+# parameters
+bs_count <- 1000
+bs_size <- 100
+
+bs_results <- list()
+bs_mean_results <- list()
+
+for (i in seq_len(bs_count)) {
+    temp <- s5_wide[sample(seq_len(nrow(s5_wide)), bs_size, replace = TRUE), ]
+    bs_results[[i]] <- temp
+    bs_mean_results[[i]] <- colMeans(temp)[-1]
+}
+```
+
+
+
