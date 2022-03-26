@@ -12,8 +12,12 @@ library(tidyr)
 
 ############################## log data
 
-                   # CHANGE THIS ON YOUR MACHINE!
-logsRaw <- fread("C:/Users/Candace/Downloads/logs.csv")
+# Only needed to do this once                  
+#logsRaw <- fread("C:/Users/Candace/Downloads/logs.csv")
+#saveRDS(logsRaw, "logsRaw")
+
+# setwd("./data")
+logsRaw <- readRDS(logsRaw)
 
 # Replace "NA" strings with NA values
 # it's weird that there's already a mix of NA strings and values in here
@@ -96,32 +100,9 @@ saveRDS(s5wide, file="wides5")
 
 fwrite(temp, file="players.csv")
 
-########## Random things I guess
 
-# From IVY Game data logged events
 
-ageKey <- data.table("age"= c(11, 12, 13, 14),
-                     "index"=c(0,1,2,3))
 
-senseKey <- data.table(senseType = c("know sense",
-                                     "priority sense",
-                                     "people sense"),
-                      keyValue = c(0,1,2))
-
-minigameKey <- data.table(gameTopic = c("know sense", 
-                                        "priority sense", 
-                                        "people sense",
-                                        "refusal power", 
-                                        "me power"),
-                          keyVale = c(0,1,2,3,4))
-
-genderKey <- data.table(gender=c("male, female"),
-                        index = c(0,1))
-
-raceKey <- data.table(race = c("African American",
-                               "Caucasian",
-                               "Hispanic"),
-                      index = c(0,1,2))
 
 
 

@@ -22,7 +22,7 @@ minigameKey <- data.table(gameTopic = c("know sense",
                                         "me power"),
                           keyVale = c(0,1,2,3,4))
 
-genderKey <- data.table(gender=c("male, female"),
+genderKey <- data.table(gender=c("male", "female"),
                         index = c(0,1))
 
 raceKey <- data.table(race = c("African American",
