@@ -50,8 +50,8 @@ s5 %>%
   summarise(count=n())
 
 # s5 wide format
-#s5wide <- 
-  tidyr::pivot_wider(s5, id_cols=player_id, names_from=weeks, values_from =S5_mean)
+s5wide <- 
+  tidyr::pivot_wider(s5Raw, id_cols=player_id, names_from=weeks, values_from =S5_mean)
 
 
 
