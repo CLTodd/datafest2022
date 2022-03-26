@@ -2,7 +2,7 @@
 #
 # 3/26/2022
 #
-# Some summary stats, demographics, etc
+# Some demographics
 
 rm(list=ls())
 
@@ -52,6 +52,19 @@ commitR <-
 logsDemographics <-
   full_join(commitAG, commitR, by="player_id")
 
-logsDemographics
+# Add the school info
+studentSchools <-
+  logsRaw %>% 
+  select(player_id, school) %>%
+  group_by(player_id, school) %>%
+  slice(1)
 
+saveRDS(studentSchools, "studentSchools")
+
+logsDemographics <- readRDS("logsDemographics")
+
+logsDemographics <-
+  left_join(logsDemographics, studentSchools, by="player_id")
+  
+saveRDS(logsDemographics, "logsDemographics")
 saveRDS(logsDemographics, "logsDemographics")
