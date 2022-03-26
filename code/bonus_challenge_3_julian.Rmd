@@ -1,0 +1,96 @@
+---
+title: "Challenge 3 Work Julian"
+output: html_notebook
+---
+
+
+
+
+```{r}
+# know
+output_know <-
+    logs %>%
+    group_by(player_id) %>%
+    top_n(1, skill_level_know) %>%
+    mutate(time = event_time_dbl, skill = skill_level_know, area = "know") %>%
+    select(player_id, time, skill, area) %>%
+    filter(time < 50000)
+
+# priority
+output_priority <-
+    logs %>%
+    group_by(player_id) %>%
+    top_n(1, skill_level_priority) %>%
+    mutate(time = event_time_dbl, skill = skill_level_priority, area = "priority") %>%
+    select(player_id, time, skill, area) %>%
+    filter(time < 50000)
+
+# people
+output_people <-
+    logs %>%
+    group_by(player_id) %>%
+    top_n(1, skill_level_people) %>%
+    mutate(time = event_time_dbl, skill = skill_level_people, area = "people") %>%
+    select(player_id, time, skill, area) %>%
+    filter(time < 50000)
+
+# refusal
+output_refusal <-
+    logs %>%
+    group_by(player_id) %>%
+    top_n(1, skill_level_refusal) %>%
+    mutate(time = event_time_dbl, skill = skill_level_refusal, area = "refusal") %>%
+    select(player_id, time, skill, area) %>%
+    filter(time < 50000)
+
+# me
+output_me <-
+    logs %>%
+    group_by(player_id) %>%
+    top_n(1, skill_level_me) %>%
+    mutate(time = event_time_dbl, skill = skill_level_me, area = "me") %>%
+    select(player_id, time, skill, area) %>%
+    filter(time < 50000)
+```
+
+```{r}
+genders <-
+    logs %>%
+    drop_na(avatar_gender) %>%
+    select(player_id, avatar_gender) %>%
+    unique()
+```
+
+```{r}
+output_know
+```
+
+
+
+```{r}
+joined_know <- inner_join(genders, output_know)
+joined_prio <- inner_join(genders, output_priority)
+joined_peop <- inner_join(genders, output_people)
+joined_refu <- inner_join(genders, output_refusal)
+joined_me <- inner_join(genders, output_me)
+```
+
+```{r}
+joined <- rbind(joined_know, joined_prio, joined_peop, joined_refu, joined_me)
+joined
+```
+
+```{r}
+joined %>%
+    filter(avatar_gender == "Female") %>%
+    ggplot() +
+    geom_point(aes(x = time, y = skill, color = area, alpha = 0.3, size = 0.01))+
+    ggtitle("The Relationship Between Maximum Skill Level and Time for Females")
+```
+```{r}
+joined %>%
+    filter(avatar_gender == "Male") %>%
+    ggplot() +
+    geom_point(aes(x = time, y = skill, color = area, alpha = 0.3, size = 0.01)) +
+    ggtitle("The Relationship Between Maximum Skill Level and Time for Males")
+```
