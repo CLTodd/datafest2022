@@ -24,9 +24,21 @@ combined <- merge(gender, df3, by="player_id") %>%
   select(player_id, avatar_gender.x, skill_level_know.y, skill_level_priority.y, skill_level_people.y, 
          skill_level_refusal.y, skill_level_me.y, event_time_dbl.y, Max)
 
-ggplot(data=combined, mapping=aes(color=avatar_gender.x)) + 
-  geom_point(aes(x=event_time_dbl.y, y=skill_level_know.y, shape=1)) + 
-  geom_point(aes(x=event_time_dbl.y, y=skill_level_priority.y, shape=2)) + 
-  geom_point(aes(x=event_time_dbl.y, y=skill_level_people.y, shape=3)) + 
-  geom_point(aes(x=event_time_dbl.y, y=skill_level_refusal.y, shape=4)) + 
-  geom_point(aes(x=event_time_dbl.y, y=skill_level_me.y, shape=5))
+combinedF <- filter(combined, avatar_gender.x == 'Female')
+combinedM <- filter(combined, avatar_gender.x == 'Male')
+
+ggplot(data=combinedF) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_know.y, color="know")) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_priority.y, color="priority")) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_people.y, color="people")) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_refusal.y, color="refusal")) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_me.y, color="me")) +
+  labs(x="Event Time for Females", y="Skill Level", title="Skill Level by Event Time for Females")
+
+ggplot(data=combinedM) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_know.y, color="know")) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_priority.y, color="priority")) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_people.y, color="people")) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_refusal.y, color="refusal")) + 
+  geom_point(aes(x=event_time_dbl.y, y=skill_level_me.y, color="me")) + 
+  labs(x="Event Time for Males", y="Skill Level", title="Skill Level by Event Time for Males")
