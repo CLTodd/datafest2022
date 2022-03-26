@@ -102,7 +102,38 @@ fwrite(temp, file="players.csv")
 
 
 
+#### Challenge #3
+skills <- readRDS("minigameKey")
+dem <- readRDS("logsDemographics")
+logs <- readRDS("logsRaw")
 
+# 
+temp <- logsRaw[,c(2, 11, 16:20)]
+  
+temp2 <-
+temp %>%
+  left_join(dem, by="player_id") %>%
+  filter(event_time_dbl<=50e3, 
+         !is.na(skill_level_know),
+         !is.na(skill_level_priority),
+         !is.na(skill_level_people),
+         !is.na(skill_level_refusal),
+         !is.na(skill_level_me)) %>%
+  arrange(player_id, desc(event_time_dbl)) %>% # Only want their latest entries
+  group_by(player_id) %>%
+  slice_max(order_by = event_time_dbl)
 
+summary(temp2)
 
+library(gridExtra)  
+  
+ggplot(temp2) +
+  geom_point(aes(x=event_time_dbl, y=skill_level_know), alpha=0.3, color="red") +
+  geom_point(aes(x=event_time_dbl, y=skill_level_priority), alpha=0.3, color="yellow") +
+  geom_point(aes(x=event_time_dbl, y=skill_level_people), alpha=0.3, color="green") +
+  geom_point(aes(x=event_time_dbl, y=skill_level_refusal), alpha=0.3, color="blue") +
+  geom_point(aes(x=event_time_dbl, y=skill_level_me), alpha=0.3 ) +
+  ylab("Skill Level") +
+  xlab("Event Time Max") +
+  facet_wrap(~gender)
 
