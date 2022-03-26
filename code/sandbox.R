@@ -96,7 +96,32 @@ saveRDS(s5wide, file="wides5")
 
 fwrite(temp, file="players.csv")
 
-sum(is.na(s5$S5_mean))
-View(s5)
+########## Random things I guess
+
+# From IVY Game data logged events
+
+ageKey <- data.table("age"= c(11, 12, 13, 14),
+                     "index"=c(0,1,2,3))
+
+senseKey <- data.table(senseType = c("know sense",
+                                     "priority sense",
+                                     "people sense"),
+                      keyValue = c(0,1,2))
+
+minigameKey <- data.table(gameTopic = c("know sense", 
+                                        "priority sense", 
+                                        "people sense",
+                                        "refusal power", 
+                                        "me power"),
+                          keyVale = c(0,1,2,3,4))
+
+genderKey <- data.table(gender=c("male, female"),
+                        index = c(0,1))
+
+raceKey <- data.table(race = c("African American",
+                               "Caucasian",
+                               "Hispanic"),
+                      index = c(0,1,2))
+
 
 
