@@ -4,85 +4,90 @@
 #
 # This may get changed later, this is basically a sandbox
 
-setwd("./data")
+setwd("./data") # does this work for anyone else?
 library(data.table)
 library(naniar)
 library(dplyr)
 library(tidyr)
 
-####### log data
+############################## log data
 
+                   # CHANGE THIS ON YOUR MACHINE!
 logsRaw <- fread("C:/Users/Candace/Downloads/logs.csv")
 
 # Replace "NA" strings with NA values
 # it's weird that there's already a mix of NA strings and values in here
 # Is that worth worrying about?
-logs <- replace_with_na_all(logsRaw, ~.x=="NA")
-# when I glanced at the table I only saw "NA" but I added "na" just in case
+# logs <- replace_with_na_all(logsRaw, ~.x=="NA") 
+# Actually this literally takes forever don't run it :(
 
-# Number of schools
-logs %>%
+# List of schools in the log
+logsSchools <-
+  logsRaw %>%
   group_by(school) %>%
-  summarise(count=n())
+  summarise(count=n()) %>%
+  select(school)
 
-# Number of players in the log
-players <-
-logs %>%
+# Number of times each player appears in the log
+logsPlayers <-
+  logsRaw %>%
   group_by(player_id) %>%
   summarise(count=n())
 
 # Number of players at each school
-players %>%
+logsSchoolsCounts <-
+  logsRaw %>%
+  group_by(player_id, school) %>%
+  summarise(freq=1) %>%
   group_by(school) %>%
   summarise(count=n())
 
-###### s5 data
+
+################################## s5 data
 
 s5Raw <- fread("./S5_scores_cleaned.csv")
 
 # Replace "NA" strings with NA values
 s5 <- replace_with_na_all(s5Raw, ~.x=="NA")
 
-# number of s5 entries
-s5player <-
-s5 %>%
-  group_by(player_id) %>%
-  summarise(count=n())
 
-# s5 wide format
+# s5 wide format, ever player is one row now
 s5wide <- 
-  tidyr::pivot_wider(s5Raw, id_cols=player_id, names_from=weeks, values_from =S5_mean)
+  tidyr::pivot_wider(s5Raw[s5Raw$player_id!="NA",], 
+                     id_cols = player_id, 
+                     names_from = weeks, 
+                     values_from = S5_mean, 
+                     names_prefix = "week")
 
-
-
-  
-  
-# Number of players in the log
-players <-
-  logs %>%
-  group_by(player_id) %>%
-  summarise(count=n())
-
-# number of s5 entries
-s5player <-
+# number of s5 entries each player has
+s5Players <-
   s5 %>%
   group_by(player_id) %>%
   summarise(count=n())
 
-# players in both
-sum(s5player$player_id%in%players$player_id)
+
+############# Challenge #1
+
+# players in both the log data and the s5 data
+sum(s5Players$player_id %in% logsPlayers$player_id)
 
 # s5 wide with no NA
 s5wideNoNa <-
   s5wide %>%
-  filter(!is.na(`0`), !is.na(`3`), !is.na(`6`), !is.na(`12`), !is.na(`24`), !is.na(player_id)) 
+  filter(!is.na(week0), 
+         !is.na(week3), 
+         !is.na(week6), 
+         !is.na(week12), 
+         !is.na(week24),
+         !is.na(player_id))
 
+# convert player ids to numeric before trying to join
 s5wideNoNa$player_id <- as.numeric(s5wideNoNa$player_id)
 
 # joining
-left <- left_join(s5wideNoNa, players, by="player_id")
+left <- left_join(s5wideNoNa, logsPlayers, by="player_id")
 head(left)
-dim(left)
+nrow(left)
 
 
 temp <- data.table(left$player_id)
