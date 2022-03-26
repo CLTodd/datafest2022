@@ -1,2 +1,3 @@
-https://www.ctclearinghouse.org/topics/research-statistics/ ## Diff data sets
-https://www.cdc.gov/std/statistics/2019/default.htm ## CDC STDs
+- https://www.ctclearinghouse.org/topics/research-statistics/ ## Diff data sets
+- https://www.cdc.gov/std/statistics/2019/default.htm ## CDC STDs
+- https://opencommons.uconn.edu/cgi/viewcontent.cgi?article=1165&context=uchcgs_masters ## UConn study 2010
