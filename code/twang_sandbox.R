@@ -59,14 +59,20 @@ final$skill_id <- unclass(factor(logs$skill_id))
 # merge log subset & s5_Scores
 combo <- merge(final, s5_Scores, by="player_id")
 
+# imputate missing values (takes a very long time, even w/ only 1 iteration)
 temp <- missRanger(data=combo, 
                    seed=16802, 
-                   maxiter=5, 
+                   maxiter=1, 
                    verbose=1)
 
-mod1 <- lm(S5_mean ~., data=combo)
+# save dataset so that we don't need to run the above code again
+write.csv(temp, "C:/Users/GuaiGuai/Downloads/datafest2022-main/data/imputed_log_sub.csv", row.names=FALSE)
+
+# initial full model
+mod1 <- lm(S5_mean ~., data=temp)
 summary(mod1)
 
+mod
 
 ###########################################################################################################################
 
