@@ -139,3 +139,15 @@ ggplot(temp2) +
   xlab("Event Time Max") +
   facet_wrap(~gender)
 
+###################################
+# weird students from the 70s
+weird <-
+  logsRaw %>%
+  filter(date<1970) 
+
+weirdStudents <-
+  weird %>%
+  group_by(player_id, school, wave, date, session) %>%
+  summarise(count=n())
+
+saveRDS(weirdStudents, "oldStudents")
