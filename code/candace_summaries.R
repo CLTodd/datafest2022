@@ -72,9 +72,10 @@ saveRDS(logsDemographics, "logsDemographics")
 
 library(gmodels)
 
+
 # Frequency tables
 
-# Race/gender
+# Frequency table
 CrossTable(logsDemographics$gender, 
            logsDemographics$race, 
            prop.t=TRUE, 
