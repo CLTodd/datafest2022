@@ -194,7 +194,7 @@ temp2 <- s5wideNoNa[,c(1, 8)]
 temp3 <- left_join(s5, temp2, by="player_id")
 betterVworse <- temp3[!is.na(temp3$PN),]
 
-
+saveRDS(betterVworse, "betterVworse")
 
 ggplot(data = betterVworse, aes(x=weeks, y=S5_mean, col=as.factor(player_id))) + 
   geom_point(show.legend = F, alpha = 0.7, size=5) +
