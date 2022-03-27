@@ -1,0 +1,71 @@
+---
+title: "Data Wrangling"
+output: html_notebook
+---
+
+```{r}
+logsFiltered_layer0 <-
+    logs %>%
+    select(player_id, event_id, event_description, event_category, event_time_dbl, 
+           minigame_id, minigame_level, skill_id, old_skill_point,
+           new_skill_point)
+```
+
+```{r}
+logsFiltered_minigameGeneral <-
+    logsFiltered_layer0 %>%
+    filter(event_category == "Minigame General")
+```
+
+```{r}
+logsFiltered_minigameGeneral <-
+    logsFiltered_minigameGeneral %>%
+    select(player_id, skill_id, event_id, event_time_dbl)
+
+# loops are so inefficient
+
+for (i in 1:nrow(logsFiltered_minigameGeneral)) {
+    if(logsFiltered_minigameGeneral$event_id[i] == 1005) {
+        logsFiltered_minigameGeneral$skill_id[i + 1] = logsFiltered_minigameGeneral$skill_id[i]
+    }
+}
+```
+
+
+```{r}
+logsFiltered_miniSummary <-
+    logsFiltered_minigameGeneral %>%
+    filter(event_id == 1003 | event_id == 1001) %>%
+    filter(event_time_dbl - shift(event_time_dbl, 1L, type = "lag") != 0) 
+
+logsFiltered_miniSummary <- rbind(data.frame(player_id = 6427001, skill_id = NA, event_id = 1003, event_time_dbl = 998), logsFiltered_miniSummary)
+```
+
+```{r}
+temp <- list()
+first1003time = 0
+first1003found = FALSE
+
+for (i in 1:nrow(logsFiltered_miniSummary)) {
+    if (logsFiltered_miniSummary$event_id[i] == 1001) {
+        temp[i] = logsFiltered_miniSummary$event_time_dbl[i-1]
+        first1003found = FALSE
+    } else if (!first1003found) {
+        first1003time = logsFiltered_miniSummary$event_time_dbl[i] 
+        first1003found = TRUE
+        temp[i] = first1003time
+    } else {
+        temp[i] = first1003time
+    }
+}
+```
+
+```{r}
+logsFiltered_miniSummary$previous_times <- as.numeric(unlist(temp))
+
+results <-
+    logsFiltered_miniSummary %>%
+    mutate(timeSpent = event_time_dbl - previous_times) %>%
+    filter(event_id == 1001)
+```
+

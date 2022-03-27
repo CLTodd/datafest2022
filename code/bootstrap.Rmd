@@ -6,7 +6,7 @@ output: html_notebook
 # Environment Setup
 ```{r}
 # clear junk
-rm(list = ls())
+# rm(list = ls())
 ```
 
 ```{r include = FALSE}
@@ -61,8 +61,6 @@ names(bs_mean_results) <- c("week0_bs_mean", "week3_bs_mean", "week6_bs_mean",
                             "week12_bs_mean", "week24_bs_mean")
 ```
 
-
-
 ```{r}
 # quantile for attribute 1
 alpha <- 0.05
@@ -70,7 +68,9 @@ quantile(bs_mean_results$week0_bs_mean, c(0.025, 0.975))
 ```
 
 ```{r}
-#
+# graphics
+ggplot() +
+    geom_point()
 ```
 
 
