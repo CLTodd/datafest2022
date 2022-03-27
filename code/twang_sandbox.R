@@ -72,7 +72,10 @@ write.csv(temp, "C:/Users/GuaiGuai/Downloads/datafest2022-main/data/imputed_log_
 mod1 <- lm(S5_mean ~., data=temp)
 summary(mod1)
 
-mod
+# more models
+mod2 <- lm(S5_mean ~  event_time_dbl + stack_id + minigame_level + avatar_age + 
+             school + chunk_id + piece_id + total_strikes + avatar_gender + avatar_id + weeks, data=temp)
+summary(mod2)
 
 ###########################################################################################################################
 
