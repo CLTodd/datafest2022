@@ -68,6 +68,9 @@ temp <- missRanger(data=combo,
 # save dataset so that we don't need to run the above code again
 write.csv(temp, "C:/Users/GuaiGuai/Downloads/datafest2022-main/data/imputed_log_sub.csv", row.names=FALSE)
 
+# re-analyze correlations
+cor(temp)
+
 # initial full model
 mod1 <- lm(S5_mean ~., data=temp)
 summary(mod1)
@@ -76,6 +79,10 @@ summary(mod1)
 mod2 <- lm(S5_mean ~  event_time_dbl + stack_id + minigame_level + avatar_age + 
              school + chunk_id + piece_id + total_strikes + avatar_gender + avatar_id + weeks, data=temp)
 summary(mod2)
+
+mod3 <- lm(S5_mean ~ player_id + event_id + event_time_dbl + stack_id + minigame_level + avatar_age + school + 
+             minigame_id + old_skill_point + aa_level_id + chunk_id + piece_id + old_choice_id + choice_id + total_points + 
+             total_strikes + avatar_gender + avatar_id + session + skill_id + weeks, data=temp)
 
 ###########################################################################################################################
 
