@@ -63,6 +63,8 @@ s5wide <-
                      values_from = S5_mean, 
                      names_prefix = "week")
 
+saveRDS(s5wide, file="s5wide")
+
 # number of s5 entries each player has
 s5Players <-
   s5 %>%
@@ -96,7 +98,7 @@ nrow(left)
 
 temp <- data.table(left$player_id)
 
-saveRDS(s5wide, file="wides5")
+
 
 fwrite(temp, file="players.csv")
 

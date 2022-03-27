@@ -67,4 +67,3 @@ logsDemographics <-
   left_join(logsDemographics, studentSchools, by="player_id")
   
 saveRDS(logsDemographics, "logsDemographics")
-saveRDS(logsDemographics, "logsDemographics")
