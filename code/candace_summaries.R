@@ -67,3 +67,31 @@ logsDemographics <-
   left_join(logsDemographics, studentSchools, by="player_id")
   
 saveRDS(logsDemographics, "logsDemographics")
+
+###########################################################
+
+library(gmodels)
+
+# Frequency tables
+
+# Race/gender
+CrossTable(logsDemographics$gender, 
+           logsDemographics$race, 
+           prop.t=TRUE, 
+           prop.r=TRUE, 
+           prop.c=TRUE, 
+           prop.chisq=FALSE)
+
+# Age
+CrossTable(logsDemographics$age, 
+           prop.t=TRUE, 
+           prop.r=TRUE, 
+           prop.c=TRUE, 
+           prop.chisq=FALSE)
+
+# School
+CrossTable(logsDemographics$school, 
+           prop.t=TRUE, 
+           prop.r=TRUE, 
+           prop.c=TRUE, 
+           prop.chisq=FALSE)
