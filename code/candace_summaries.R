@@ -26,7 +26,7 @@ commitAG <-
   select(player_id, event_id, event_time_dbl, data_values) %>%
   arrange(player_id, desc(event_time_dbl)) %>% # Only want their most recent commitment
   group_by(player_id) %>%
-  slice_max(order_by = event_time_dbl) %>%
+  slice_max(1) %>%
   mutate(ageCode = as.numeric(gsub(pattern=",.", # get the age code
                                    replacement="",
                                    x=data_values))) %>%
@@ -44,7 +44,7 @@ commitR <-
   select(player_id, event_id, event_time_dbl, data_values) %>%
   arrange(player_id, desc(event_time_dbl)) %>% # Only want their most recent commitment
   group_by(player_id) %>%
-  slice_max(order_by = event_time_dbl) %>%
+  slice_max(1) %>%
   mutate(raceCode = as.numeric(data_values)) %>%
   left_join(raceKey, by=c("raceCode"="index")) %>% # get the race
   select(player_id, race, raceCode)
@@ -61,7 +61,7 @@ studentSchools <-
 
 saveRDS(studentSchools, "studentSchools")
 
-logsDemographics <- readRDS("logsDemographics")
+#logsDemographics <- readRDS("logsDemographics")
 
 logsDemographics <-
   left_join(logsDemographics, studentSchools, by="player_id")
