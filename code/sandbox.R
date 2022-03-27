@@ -151,3 +151,60 @@ weirdStudents <-
   summarise(count=n())
 
 saveRDS(weirdStudents, "oldStudents")
+
+##############################
+
+dem <- readRDS("logsDemographics")
+
+# Just looking at one player who we know gained some skill
+which.max(logsRaw$skill_level_know)[1]
+player <- logsRaw$player_id[14271]
+player <- logsRaw[logsRaw$player_id==player,]
+
+
+s5 <- fread("S5_scores_cleaned.csv")
+
+s5wideNoNa$diff <- s5wideNoNa$week24 - s5wideNoNa$week0
+
+s5wideNoNa$PN <- ifelse(s5wideNoNa$diff<0, "Neg", "Pos")
+students <- s5wideNoNa[,c(1,7,8)]
+
+cors <- rep(NA, nrow(s5wideNoNa))
+j <- 1
+for (p in unique(s5wideNoNa$player_id)){
+
+  temp <- s5[s5$player_id==p]
+  print(j)
+  print(temp)
+  cors[j] <- cor(temp$weeks, temp$S5_mean)
+  
+  j <-j+1
+    
+}
+
+# players whose scores stayed the max the whole time (also the only players whose scores never changed)
+playersNA <- unique(s5wideNoNa$player_id)[c(5, 7, 13, 15, 18, 20)]
+
+players <- unique(s5wideNoNa$player_id)[-c(5, 7, 13, 15, 18, 20)]
+
+s5wideNoNa$cor <- cors
+s5wideNoNa$PN <- ifelse(s5wideNoNa$cor>0, "Pos", ifelse(is.na(s5wideNoNa), NA, "Neg"))
+temp2 <- s5wideNoNa[,c(1, 8)]
+
+temp3 <- left_join(s5, temp2, by="player_id")
+betterVworse <- temp3[!is.na(temp3$PN),]
+
+
+
+ggplot(data = betterVworse, aes(x=weeks, y=S5_mean, col=as.factor(player_id))) + 
+  geom_point(show.legend = F, alpha = 0.7, size=5) +
+  geom_line(show.legend = F, alpha = 0.7) +
+  scale_color_viridis_d() +
+  labs(x = "Weeks", y = "Score in assessment") +
+  facet_wrap(~PN)
+
+
+player <- 6427041
+
+player <- logsRaw[logsRaw$player_id==player, ]
+
